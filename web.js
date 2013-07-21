@@ -1,19 +1,14 @@
 var express = require('express');
-var fs = require('fs');
 
-var app = express.createServer(express.logger());
+var port = process.env.PORT || 8080;
+var app = express();
+ 
+// log requests
+app.use(express.logger('dev'));
 
-app.get('/', function(request, response) {
-
-	fs.readFile('index.html', 'utf8', function(err, data) {
-		if (err) {
-			return console.log(err);
-		}
-		response.send(data);
-	});
-});
-
-var port = process.env.PORT || 5000;
+app.use(express.static(__dirname + '/public'));
+app.use(app.router);
+ 
 app.listen(port, function() {
 	console.log("Listening on " + port);
 });
